@@ -31,6 +31,7 @@ function AdminLayout() {
           <Link className="nav-link text-white" to="/admin/orders"> Manage Orders</Link>
           <Link className="nav-link text-white" to="/admin/restaurants"> Manage Restaurants</Link>
           <Link className="nav-link text-white" to="/admin/cuisines"> Manage Cuisines</Link>
+
         </nav>
         <button className="btn btn-danger mt-4 w-100" onClick={handleLogout}>
           Logout

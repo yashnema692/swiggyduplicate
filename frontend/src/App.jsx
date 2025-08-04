@@ -49,7 +49,11 @@ function App() {
           <Route path="users" element={<ManageUsers />} />
           <Route path="orders" element={<ManageOrders />} />
           <Route path="restaurants" element={<ManageRestaurants />} />
-          <Route path="cuisine" element={<ManageCuisines/>} /> {/* ✅ fixed */}
+      
+           <Route path="cuisines" element={<ManageCuisines />} /> {/* ✅ plural */}
+
+
+         
         </Route>
 
         {/* Home Page → Protected */}
