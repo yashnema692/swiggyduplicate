@@ -4,252 +4,287 @@ import {
   addCuisine,
   updateCuisine,
   deleteCuisine,
+  addDish,
+  updateDish,
+  deleteDish,
 } from "../../api/cuisineApi";
 
 function ManageCuisines() {
   const [cuisines, setCuisines] = useState([]);
   const [form, setForm] = useState({ name: "", image: "", description: "" });
-  const [editingId, setEditingId] = useState(null);
+  const [editingCuisine, setEditingCuisine] = useState(null);
+
+  const [dishForm, setDishForm] = useState({
+    name: "",
+    image: "",
+    price: "",
+    description: "",
+  });
+  const [editingDish, setEditingDish] = useState(null);
+  const [selectedCuisine, setSelectedCuisine] = useState(null);
 
   const fetchCuisines = async () => {
-    try {
-      const { data } = await getCuisines();
-      setCuisines(data);
-    } catch (err) {
-      console.error(err);
-    }
+    const { data } = await getCuisines();
+    setCuisines(data);
   };
 
   useEffect(() => {
     fetchCuisines();
   }, []);
 
-  const handleSubmit = async (e) => {
+  // ✅ Cuisine Handlers
+  const handleSubmitCuisine = async (e) => {
     e.preventDefault();
-    try {
-      if (editingId) {
-        await updateCuisine(editingId, form);
-      } else {
-        await addCuisine(form);
-      }
-      setForm({ name: "", image: "", description: "" });
-      setEditingId(null);
-      fetchCuisines();
-    } catch (err) {
-      console.error(err);
+    if (editingCuisine) {
+      await updateCuisine(editingCuisine, form);
+    } else {
+      await addCuisine(form);
     }
+    setForm({ name: "", image: "", description: "" });
+    setEditingCuisine(null);
+    fetchCuisines();
   };
 
-  const handleEdit = (cuisine) => {
-    setForm({
-      name: cuisine.name,
-      image: cuisine.image,
-      description: cuisine.description,
-    });
-    setEditingId(cuisine._id);
+  const handleEditCuisine = (c) => {
+    setForm({ name: c.name, image: c.image, description: c.description });
+    setEditingCuisine(c._id);
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Delete this cuisine?")) {
+  const handleDeleteCuisine = async (id) => {
+    if (window.confirm("Delete cuisine?")) {
       await deleteCuisine(id);
       fetchCuisines();
     }
   };
 
-  return (
-    <div className="manage-cuisines">
-      <h2 className="title">🍴 Manage Cuisines</h2>
+  // ✅ Dish Handlers
+  const handleSubmitDish = async (e) => {
+    e.preventDefault();
+    if (editingDish) {
+      await updateDish(selectedCuisine, editingDish, dishForm);
+    } else {
+      await addDish(selectedCuisine, dishForm);
+    }
+    setDishForm({ name: "", image: "", price: "", description: "" });
+    setEditingDish(null);
+    setSelectedCuisine(null);
+    fetchCuisines();
+  };
 
-      {/* Form */}
-      <div className="form-card">
-        <h4>{editingId ? "✏️ Edit Cuisine" : "➕ Add New Cuisine"}</h4>
-        <form onSubmit={handleSubmit} className="cuisine-form">
-          <input
-            type="text"
-            placeholder="Cuisine Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            required
-          />
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={form.image}
-            onChange={(e) => setForm({ ...form, image: e.target.value })}
-          />
-          <textarea
-            placeholder="Description"
-            value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-          />
-          <button type="submit" className="btn-primary">
-            {editingId ? "Update" : "Add"} Cuisine
-          </button>
-          {editingId && (
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => {
-                setEditingId(null);
-                setForm({ name: "", image: "", description: "" });
-              }}
-            >
-              Cancel
-            </button>
-          )}
-        </form>
+  const handleEditDish = (cuisineId, dish) => {
+    setDishForm({
+      name: dish.name,
+      image: dish.image,
+      price: dish.price,
+      description: dish.description,
+    });
+    setSelectedCuisine(cuisineId);
+    setEditingDish(dish._id);
+  };
+
+  const handleDeleteDish = async (cuisineId, dishId) => {
+    if (window.confirm("Delete dish?")) {
+      await deleteDish(cuisineId, dishId);
+      fetchCuisines();
+    }
+  };
+
+  return (
+    <div className="container py-4">
+      <h2 className="mb-4 text-center text-primary fw-bold">
+        🍴 Manage Cuisines & Dishes
+      </h2>
+
+      {/* Cuisine Form */}
+      <div className="card mb-4 shadow-sm border-0 rounded-3">
+        <div className="card-header bg-gradient text-white fw-semibold" style={{background:"linear-gradient(90deg,#6a11cb,#2575fc)"}}>
+          {editingCuisine ? "✏ Edit Cuisine" : "➕ Add Cuisine"}
+        </div>
+        <div className="card-body bg-light">
+          <form onSubmit={handleSubmitCuisine} className="row g-3">
+            <div className="col-md-4">
+              <input
+                className="form-control"
+                placeholder="Cuisine Name"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                required
+              />
+            </div>
+            <div className="col-md-4">
+              <input
+                className="form-control"
+                placeholder="Image URL"
+                value={form.image}
+                onChange={(e) => setForm({ ...form, image: e.target.value })}
+              />
+            </div>
+            <div className="col-md-4">
+              <input
+                className="form-control"
+                placeholder="Description"
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-12 text-end">
+              <button type="submit" className="btn btn-success px-4">
+                {editingCuisine ? "Update" : "Add"} Cuisine
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
       {/* Cuisine List */}
-      <div className="table-container">
-        <table className="cuisine-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Description</th>
-              <th style={{ width: "160px" }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cuisines.map((cuisine) => (
-              <tr key={cuisine._id}>
-                <td>{cuisine.name}</td>
-                <td>
-                  {cuisine.image && (
-                    <img
-                      src={cuisine.image}
-                      alt={cuisine.name}
-                      width="60"
-                      style={{ borderRadius: "6px" }}
-                    />
+      <div className="row">
+        {cuisines.map((cuisine) => (
+          <div className="col-md-6 mb-4" key={cuisine._id}>
+            <div className="card shadow-sm border-0 rounded-3 h-100">
+              {cuisine.image && (
+                <img
+                  src={cuisine.image}
+                  alt={cuisine.name}
+                  className="card-img-top"
+                  style={{ height: "180px", objectFit: "cover" }}
+                />
+              )}
+              <div className="card-body d-flex flex-column bg-light">
+                <h5 className="card-title text-dark">{cuisine.name}</h5>
+                <p className="card-text text-muted small">{cuisine.description}</p>
+
+                <div className="mb-2">
+                  <button
+                    className="btn btn-sm btn-outline-primary me-2"
+                    onClick={() => handleEditCuisine(cuisine)}
+                  >
+                    ✏ Edit
+                  </button>
+                  <button
+                    className="btn btn-sm btn-outline-danger"
+                    onClick={() => handleDeleteCuisine(cuisine._id)}
+                  >
+                    🗑 Delete
+                  </button>
+                </div>
+
+                {/* Dishes with Scroll */}
+                <h6 className="mt-3 fw-semibold">Dishes</h6>
+                <div
+                  className="dish-list"
+                  style={{
+                    maxHeight: "160px",
+                    overflowY: "auto",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "6px",
+                    padding: "6px",
+                    background: "#fff",
+                  }}
+                >
+                  {cuisine.dishes?.length ? (
+                    cuisine.dishes.map((dish) => (
+                      <div
+                        key={dish._id}
+                        className="d-flex justify-content-between align-items-center border-bottom py-2"
+                      >
+                        <div>
+                          🍽 <strong>{dish.name}</strong> – ₹{dish.price}
+                        </div>
+                        <div>
+                          <button
+                            className="btn btn-sm btn-outline-secondary me-2"
+                            onClick={() => handleEditDish(cuisine._id, dish)}
+                          >
+                            ✏
+                          </button>
+                          <button
+                            className="btn btn-sm btn-outline-danger"
+                            onClick={() => handleDeleteDish(cuisine._id, dish._id)}
+                          >
+                            🗑
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-muted small">No dishes added yet.</p>
                   )}
-                </td>
-                <td>{cuisine.description}</td>
-                <td>
-                  <button
-                    className="btn-edit"
-                    onClick={() => handleEdit(cuisine)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn-delete"
-                    onClick={() => handleDelete(cuisine._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {cuisines.length === 0 && (
-              <tr>
-                <td colSpan="4" style={{ textAlign: "center", color: "#888" }}>
-                  No cuisines found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                </div>
+
+                <button
+                  className="btn btn-sm btn-success mt-3 align-self-start"
+                  onClick={() => setSelectedCuisine(cuisine._id)}
+                >
+                  ➕ Add Dish
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Styles */}
-      <style jsx>{`
-        .manage-cuisines {
-          padding: 20px;
-        }
-        .title {
-          margin-bottom: 20px;
-        }
-        .form-card {
-          background: #fff;
-          padding: 20px;
-          border-radius: 10px;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-          margin-bottom: 30px;
-        }
-        .cuisine-form {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-        input,
-        textarea {
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 6px;
-          font-size: 14px;
-        }
-        textarea {
-          resize: none;
-          min-height: 60px;
-        }
-        .btn-primary {
-          background: #ff5a1f;
-          color: white;
-          border: none;
-          padding: 10px 14px;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: 0.2s;
-        }
-        .btn-primary:hover {
-          background: #e14d18;
-        }
-        .btn-secondary {
-          background: #ccc;
-          color: black;
-          border: none;
-          padding: 10px 14px;
-          border-radius: 6px;
-          margin-left: 10px;
-          cursor: pointer;
-        }
-        .table-container {
-          overflow-x: auto;
-        }
-        .cuisine-table {
-          width: 100%;
-          border-collapse: collapse;
-          background: white;
-          border-radius: 10px;
-          overflow: hidden;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-        .cuisine-table th,
-        .cuisine-table td {
-          border: 1px solid #eee;
-          padding: 12px;
-          text-align: left;
-        }
-        .cuisine-table th {
-          background: #f7f7f7;
-          font-weight: 600;
-        }
-        .btn-edit {
-          background: #3498db;
-          color: white;
-          border: none;
-          padding: 6px 12px;
-          border-radius: 6px;
-          margin-right: 8px;
-          cursor: pointer;
-        }
-        .btn-delete {
-          background: #e74c3c;
-          color: white;
-          border: none;
-          padding: 6px 12px;
-          border-radius: 6px;
-          cursor: pointer;
-        }
-        .btn-edit:hover {
-          background: #2d83c4;
-        }
-        .btn-delete:hover {
-          background: #c0392b;
-        }
-      `}</style>
+      {/* Dish Form */}
+      {selectedCuisine && (
+        <div className="card mt-4 shadow-sm border-0 rounded-3">
+          <div className="card-header bg-success text-white fw-semibold">
+            {editingDish ? "✏ Edit Dish" : "➕ Add Dish"}
+          </div>
+          <div className="card-body bg-light">
+            <form onSubmit={handleSubmitDish} className="row g-3">
+              <div className="col-md-3">
+                <input
+                  className="form-control"
+                  placeholder="Dish Name"
+                  value={dishForm.name}
+                  onChange={(e) =>
+                    setDishForm({ ...dishForm, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  className="form-control"
+                  placeholder="Image URL"
+                  value={dishForm.image}
+                  onChange={(e) =>
+                    setDishForm({ ...dishForm, image: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-md-2">
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="Price"
+                  value={dishForm.price}
+                  onChange={(e) =>
+                    setDishForm({ ...dishForm, price: e.target.value })
+                  }
+                  required
+                />
+              </div>
+              <div className="col-md-4">
+                <input
+                  className="form-control"
+                  placeholder="Description"
+                  value={dishForm.description}
+                  onChange={(e) =>
+                    setDishForm({ ...dishForm, description: e.target.value })
+                  }
+                />
+              </div>
+              <div className="col-12 text-end">
+                <button type="submit" className="btn btn-success px-4">
+                  {editingDish ? "Update Dish" : "Save Dish"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

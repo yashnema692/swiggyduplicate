@@ -1,14 +1,17 @@
-// models/Cuisine.js
 import mongoose from "mongoose";
 
-const cuisineSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true },
-    image: { type: String, default: "" },
-    description: { type: String, default: "" },
-  },
-  { timestamps: true }
-);
+const dishSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  image: { type: String },
+  price: { type: Number, required: true },
+  description: { type: String }
+});
 
-const Cuisine = mongoose.model("Cuisine", cuisineSchema);
-export default Cuisine;
+const cuisineSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  image: { type: String },
+  description: { type: String },
+  dishes: [dishSchema]
+});
+
+export default mongoose.model("Cuisine", cuisineSchema);
