@@ -1,13 +1,146 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+
+const TopStatsBar = () => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
+  return (
+    <div
+      style={{
+        background: "#FF0100",
+        color: "white",
+        fontSize: "13px",
+        fontWeight: 500,
+      }}
+    >
+      <div className="container-fluid">
+        <div className="row align-items-center py-2">
+          {/* ✅ Left (Stats/Tagline) - Hidden on mobile */}
+          <div className="col-md-3 d-none d-md-flex justify-content-start gap-3">
+            <div className="d-flex align-items-center gap-1">
+              <i className="fas fa-star"></i>
+              <span>Trusted by 2.6K+ Customers</span>
+            </div>
+            <div className="d-flex align-items-center gap-1">
+              <i className="fas fa-check-circle"></i>
+              <span>100K+ Orders Served</span>
+            </div>
+          </div>
+
+          {/* ✅ Center (Scrolling Deals Banner) */}
+          <div className="col-12 col-md-6 text-center">
+            <div
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                position: "relative",
+                height: "20px",
+                fontWeight: 600,
+                fontSize: "14px",
+              }}
+            >
+              <div
+                style={{
+                  display: "inline-block",
+                  paddingLeft: "100%",
+                  animation: "scroll-left 15s linear infinite",
+                }}
+              >
+                 Free Delivery on First Order |  Up to 50% OFF on Popular
+                Restaurants |  Order Now & Save Big!
+              </div>
+            </div>
+          </div>
+
+          {/* ✅ Right (User Info) */}
+          <div className="col-md-3 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0">
+            {user ? (
+              <div className="d-flex align-items-center gap-2">
+                <span
+                  className="fw-semibold"
+                  style={{
+                    fontSize: "13px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <i className="fas fa-user-circle fs-5"></i>
+                  {user.name}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-sm fw-bold"
+                  style={{
+                    background: "white",
+                    color: "#FF0100",
+                    borderRadius: "50px",
+                    padding: "3px 12px",
+                    fontSize: "12px",
+                    lineHeight: "1",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/login"
+                className="btn btn-sm fw-bold"
+                style={{
+                  background: "white",
+                  color: "#FF0100",
+                  borderRadius: "50px",
+                  padding: "3px 12px",
+                  fontSize: "12px",
+                  lineHeight: "1",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                }}
+              >
+                Login
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ✅ CSS Animation */}
+      <style>
+        {`
+          @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+          }
+        `}
+      </style>
+    </div>
+  );
+};
 const Navbar = () => {
   return (
     <>
       {/* Top Stats Bar */}
-      <div className="stats-bar">
+      {/* <div className="stats-bar">
         <div className="container">
           <div className="d-flex justify-content-center align-items-center gap-4">
             <div className="stat-item">
@@ -20,7 +153,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Header */}
       <header
@@ -88,43 +221,7 @@ const Navbar = () => {
                   <div className="support-number">+6100 0029</div>
                 </div>
 
-                {/* Action Icons */}
-                <div className="d-flex align-items-center gap-3 text-center">
-                  {/* Login */}
-                  <a
-                    href="#"
-                    className="text-dark text-decoration-none d-flex flex-column align-items-center"
-                  >
-                    <i className="fas fa-user fa-lg"></i>
-                    <small>Login</small>
-                  </a>
-
-                  {/* My List with badge */}
-                  <div className="position-relative">
-                    <a
-                      href="#"
-                      className="text-dark text-decoration-none d-flex flex-column align-items-center"
-                    >
-                      <i className="fas fa-list fa-lg"></i>
-                      <small>My List</small>
-                    </a>
-                    <span
-                      className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary"
-                      style={{ fontSize: "0.7rem" }}
-                    >
-                      2
-                    </span>
-                  </div>
-
-                  {/* Cart */}
-                  <a
-                    href="#"
-                    className="text-dark text-decoration-none d-flex flex-column align-items-center"
-                  >
-                    <i className="fas fa-shopping-cart fa-lg"></i>
-                    <small>Cart</small>
-                  </a>
-                </div>
+               
               </div>
             </div>
 
@@ -708,4 +805,5 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export { TopStatsBar, Navbar };
+
