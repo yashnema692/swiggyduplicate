@@ -9,6 +9,8 @@ import Login from "./components/Login.jsx";
 import AdminSignup from "./components/AdminSignup.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
 import CuisinePage from "./components/CuisinePage.jsx"; // ✅ User side cuisine page
+import DishPage from "./components/DishPage.jsx";
+import OrderConfirm from "./components/OrderConfirm.jsx";
 
 // ✅ Admin Layout
 import AdminLayout from "./components/admin/AdminLayout.jsx";
@@ -87,6 +89,35 @@ function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+  path="/dish/:dishId"
+  element={
+    <PrivateRoute>
+      <>
+        <TopStatsBar />
+        <Navbar />
+        <DishPage />
+        <Footer />
+      </>
+    </PrivateRoute>
+  }
+/>
+
+
+<Route
+  path="/order-confirm"
+  element={
+    <PrivateRoute>
+      <>
+        <TopStatsBar />
+        <Navbar />
+        <OrderConfirm />
+        <Footer />
+      </>
+    </PrivateRoute>
+  }
+/>
 
         {/* Default Route → always go to login */}
         <Route path="/" element={<Navigate to="/login" />} />

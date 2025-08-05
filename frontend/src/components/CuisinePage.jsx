@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getCuisines } from "../api/cuisineApi";
 
 const CuisinePage = () => {
@@ -54,21 +54,27 @@ const CuisinePage = () => {
             {cuisine.dishes && cuisine.dishes.length > 0 ? (
               <div className="dish-grid">
                 {cuisine.dishes.map((dish) => (
-                  <div key={dish._id} className="dish-card">
-                    <div className="dish-img">
-                      <img
-                        src={dish.image || "https://via.placeholder.com/200"}
-                        alt={dish.name}
-                      />
+                  <Link
+                    key={dish._id}
+                    to={`/dish/${dish._id}`}
+                    className="text-decoration-none text-dark"
+                  >
+                    <div className="dish-card">
+                      <div className="dish-img">
+                        <img
+                          src={dish.image || "https://via.placeholder.com/200"}
+                          alt={dish.name}
+                        />
+                      </div>
+                      <div className="dish-body">
+                        <h4 className="dish-name">{dish.name}</h4>
+                        <p className="dish-desc">{dish.description}</p>
+                        {dish.price && (
+                          <p className="dish-price">₹{dish.price}</p>
+                        )}
+                      </div>
                     </div>
-                    <div className="dish-body">
-                      <h4 className="dish-name">{dish.name}</h4>
-                      <p className="dish-desc">{dish.description}</p>
-                      {dish.price && (
-                        <p className="dish-price">₹{dish.price}</p>
-                      )}
-                    </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             ) : (

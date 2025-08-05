@@ -5,6 +5,8 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import cuisineRoutes from "./routes/cuisineRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
+
 dotenv.config();
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);   // User routes
 app.use("/api/admin", adminRoutes); // Admin routes
 app.use("/api/cuisines", cuisineRoutes);
+app.use("/api/orders", orderRoutes);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
