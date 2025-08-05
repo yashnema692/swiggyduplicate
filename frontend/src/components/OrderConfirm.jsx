@@ -5,6 +5,7 @@ import { addOrder } from "../api/orderApi";
 function OrderConfirm() {
   const [order, setOrder] = useState(null);
   const [form, setForm] = useState({ customerName: "", mobile: "", address: "" });
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false); // ✅ new state
   const navigate = useNavigate();
 
   // Load order from localStorage
@@ -87,7 +88,25 @@ function OrderConfirm() {
           required
         />
 
-        <button className="btn btn-success w-100" onClick={handleConfirm}>
+        {/* ✅ Payment Confirmation */}
+        <div className="form-check mb-3">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="paymentCheck"
+            checked={paymentConfirmed}
+            onChange={(e) => setPaymentConfirmed(e.target.checked)}
+          />
+          <label className="form-check-label" htmlFor="paymentCheck">
+            I confirm that the payment ₹{order.price} has been made.
+          </label>
+        </div>
+
+        <button
+          className="btn btn-success w-100"
+          onClick={handleConfirm}
+          disabled={!paymentConfirmed} // ✅ Button only enabled after payment confirmation
+        >
           ✅ Place Order
         </button>
       </div>

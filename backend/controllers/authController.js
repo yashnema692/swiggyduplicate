@@ -73,3 +73,14 @@ export const login = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// Get all users (including admins)
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password"); // hide password field
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+

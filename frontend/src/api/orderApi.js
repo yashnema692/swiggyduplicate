@@ -11,8 +11,11 @@ const getAuthHeader = () => {
 export const addOrder = (orderData) =>
   axios.post(API, orderData, { headers: getAuthHeader() });
 
-export const getOrders = () =>
+export const getOrders = () => // Admin only
   axios.get(API, { headers: getAuthHeader() });
+
+export const getUserOrders = () => // Logged-in user
+  axios.get(`${API}/my-orders`, { headers: getAuthHeader() });
 
 export const updateOrder = (id, status) =>
   axios.put(`${API}/${id}`, { status }, { headers: getAuthHeader() });

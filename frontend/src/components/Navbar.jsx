@@ -34,7 +34,7 @@ const TopStatsBar = () => {
     >
       <div className="container-fluid">
         <div className="row align-items-center py-2">
-          {/* ✅ Left (Stats/Tagline) - Hidden on mobile */}
+          {/* ✅ Left (Stats/Tagline) */}
           <div className="col-md-3 d-none d-md-flex justify-content-start gap-3">
             <div className="d-flex align-items-center gap-1">
               <i className="fas fa-star"></i>
@@ -65,16 +65,34 @@ const TopStatsBar = () => {
                   animation: "scroll-left 15s linear infinite",
                 }}
               >
-                 Free Delivery on First Order |  Up to 50% OFF on Popular
-                Restaurants |  Order Now & Save Big!
+                Free Delivery on First Order | Up to 50% OFF on Popular
+                Restaurants | Order Now & Save Big!
               </div>
             </div>
           </div>
 
-          {/* ✅ Right (User Info) */}
-          <div className="col-md-3 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0">
+          {/* ✅ Right (User Info + Cart) */}
+          <div className="col-md-3 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0 gap-2">
             {user ? (
               <div className="d-flex align-items-center gap-2">
+                {/* 👇 Cart Button */}
+                <Link
+                  to="/cart"
+                  className="btn btn-sm fw-bold"
+                  style={{
+                    background: "white",
+                    color: "#FF0100",
+                    borderRadius: "50px",
+                    padding: "3px 12px",
+                    fontSize: "12px",
+                    lineHeight: "1",
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  <i className="fas fa-shopping-cart"></i> Cart
+                </Link>
+
+                {/* 👇 User Info */}
                 <span
                   className="fw-semibold"
                   style={{
@@ -87,6 +105,8 @@ const TopStatsBar = () => {
                   <i className="fas fa-user-circle fs-5"></i>
                   {user.name}
                 </span>
+
+                {/* 👇 Logout Button */}
                 <button
                   onClick={handleLogout}
                   className="btn btn-sm fw-bold"
@@ -136,6 +156,7 @@ const TopStatsBar = () => {
     </div>
   );
 };
+
 const Navbar = () => {
   return (
     <>

@@ -11,6 +11,7 @@ import AdminLogin from "./components/AdminLogin.jsx";
 import CuisinePage from "./components/CuisinePage.jsx"; // ✅ User side cuisine page
 import DishPage from "./components/DishPage.jsx";
 import OrderConfirm from "./components/OrderConfirm.jsx";
+import CartPage from "./components/CartPage.jsx";
 
 // ✅ Admin Layout
 import AdminLayout from "./components/admin/AdminLayout.jsx";
@@ -113,6 +114,20 @@ function App() {
         <TopStatsBar />
         <Navbar />
         <OrderConfirm />
+        <Footer />
+      </>
+    </PrivateRoute>
+  }
+/>
+
+<Route
+  path="/cart"
+  element={
+    <PrivateRoute>
+      <>
+        <TopStatsBar />
+        <Navbar />
+        <CartPage />
         <Footer />
       </>
     </PrivateRoute>
