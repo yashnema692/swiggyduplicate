@@ -24,64 +24,78 @@ const CuisinePage = () => {
   return (
     <div className="cuisine-page">
       {/* ✅ Hero Section */}
-      <div className="cuisine-hero">
-        <h1>{cuisineName} Cuisine</h1>
-        <p>Explore top dishes and restaurants for {cuisineName} cuisine 🍽️</p>
+      <div
+        className="cuisine-hero"
+        style={{
+          backgroundImage: `url(${
+            cuisine?.image || "https://via.placeholder.com/1200x400"
+          })`,
+        }}
+      >
+        <div className="overlay">
+          <h1>{cuisineName} Cuisine</h1>
+          <p>Explore top dishes and restaurants 🍽️</p>
+        </div>
       </div>
 
-      {/* ✅ Cuisine Details */}
-      <div className="container py-4">
+      <div className="container py-5">
         {cuisine ? (
           <>
-            <div className="cuisine-detail-card">
-              <div className="card-img">
-                <img
-                  src={cuisine.image || "https://via.placeholder.com/400"}
-                  alt={cuisine.name}
-                />
-              </div>
-              <div className="card-body">
-                <h3 className="cuisine-name">{cuisine.name}</h3>
-                <p className="cuisine-desc">
-                  {cuisine.description ||
-                    "Delicious cuisine with popular dishes."}
-                </p>
+            {/* ✅ Cuisine Info */}
+            <div className="cuisine-info-card shadow-sm mb-5">
+              <h2 className="fw-bold mb-2">{cuisine.name}</h2>
+              <p className="text-muted">{cuisine.description}</p>
+              <div className="extra-info mt-3">
+                <span className="badge bg-warning text-dark"> Popular</span>
+                <span className="badge bg-secondary"> Trending</span>
+                <span className="badge bg-primary">⏱ 20-30 min</span>
               </div>
             </div>
 
             {/* ✅ Dishes Section */}
-            <h2 className="dishes-title">Popular Dishes</h2>
-            {cuisine.dishes && cuisine.dishes.length > 0 ? (
-              <div className="dish-grid">
-                {cuisine.dishes.map((dish) => (
-                  <Link
-                    key={dish._id}
-                    to={`/dish/${dish._id}`}
-                    className="text-decoration-none text-dark"
-                  >
-                    <div className="dish-card">
-                      <div className="dish-img">
-                        <img
-                          src={dish.image || "https://via.placeholder.com/200"}
-                          alt={dish.name}
-                        />
+            <h3 className="fw-bold mb-4">🍴 Popular Dishes</h3>
+            <div className="row">
+              {cuisine.dishes && cuisine.dishes.length > 0 ? (
+                cuisine.dishes.map((dish) => (
+                  <div className="col-md-4 col-sm-6 mb-4" key={dish._id}>
+                    <Link
+                      to={`/dish/${dish._id}`}
+                      className="text-decoration-none text-dark"
+                    >
+                      <div className="dish-card shadow-sm">
+                        <div className="dish-img">
+                          <img
+                            src={
+                              dish.image || "https://via.placeholder.com/400"
+                            }
+                            alt={dish.name}
+                          />
+                        </div>
+                        <div className="dish-body">
+                          <h5 className="fw-bold">{dish.name}</h5>
+                          <p className="dish-desc text-muted small">
+                            {dish.description || "Freshly prepared & tasty"}
+                          </p>
+                          <div className="d-flex justify-content-between align-items-center mt-2">
+                            <span className="dish-price">
+                              ₹{dish.price || "—"}
+                            </span>
+                            <span className="rating">⭐ 4.{Math.floor(Math.random() * 5)}</span>
+                          </div>
+                          <p className="delivery-time text-muted small mt-1">
+                             Delivery in 30 mins
+                          </p>
+                        </div>
                       </div>
-                      <div className="dish-body">
-                        <h4 className="dish-name">{dish.name}</h4>
-                        <p className="dish-desc">{dish.description}</p>
-                        {dish.price && (
-                          <p className="dish-price">₹{dish.price}</p>
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-muted">
-                No dishes added yet for {cuisineName}.
-              </p>
-            )}
+                    </Link>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-muted">
+                  No dishes added yet for {cuisineName}.
+                </p>
+              )}
+            </div>
           </>
         ) : (
           <p className="text-center text-muted">
@@ -92,108 +106,71 @@ const CuisinePage = () => {
 
       {/* ✅ CSS */}
       <style jsx>{`
+        body {
+          background: #f9fafb;
+          font-family: "Inter", sans-serif;
+        }
         .cuisine-hero {
-          background: linear-gradient(135deg, #ff5a1f, #ff7f50);
-          color: white;
-          text-align: center;
-          padding: 60px 20px;
+          height: 280px;
+          background-size: cover;
+          background-position: center;
           border-radius: 0 0 25px 25px;
+          position: relative;
+        }
+        .cuisine-hero .overlay {
+          background: rgba(44, 62, 80, 0.55);
+          color: white;
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
         }
         .cuisine-hero h1 {
           font-size: 2.5rem;
           font-weight: 800;
-          margin-bottom: 10px;
         }
-        .cuisine-hero p {
-          font-size: 1.1rem;
-          opacity: 0.9;
-        }
-
-        .cuisine-detail-card {
-          display: flex;
-          flex-direction: column;
-          background: white;
+        .cuisine-info-card {
+          background: #fff;
           border-radius: 16px;
-          overflow: hidden;
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-          max-width: 600px;
-          margin: 0 auto 30px;
+          padding: 25px;
         }
-        .card-img {
-          height: 240px;
-          overflow: hidden;
+        .extra-info span {
+          margin-right: 10px;
+          font-size: 0.9rem;
         }
-        .card-img img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-        .card-body {
-          padding: 20px;
-          text-align: center;
-        }
-
-        .dishes-title {
-          font-size: 1.8rem;
-          font-weight: 700;
-          margin: 30px 0 15px;
-          text-align: center;
-        }
-
-        /* ✅ Dishes Grid with Scrollbar */
-        .dish-grid {
-          display: flex;
-          gap: 16px;
-          overflow-x: auto;
-          padding: 10px 5px;
-          scrollbar-width: thin;
-        }
-        .dish-grid::-webkit-scrollbar {
-          height: 8px;
-        }
-        .dish-grid::-webkit-scrollbar-thumb {
-          background: #ff5a1f;
-          border-radius: 10px;
-        }
-
         .dish-card {
-          flex: 0 0 220px;
-          background: white;
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          background: #fff;
+          border-radius: 14px;
           overflow: hidden;
-          transition: transform 0.3s ease;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .dish-card:hover {
-          transform: translateY(-5px);
-        }
-        .dish-img {
-          height: 140px;
-          overflow: hidden;
+          transform: translateY(-6px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
         .dish-img img {
           width: 100%;
-          height: 100%;
+          height: 180px;
           object-fit: cover;
+          border-bottom: 1px solid #eee;
         }
         .dish-body {
-          padding: 12px;
-          text-align: center;
-        }
-        .dish-name {
-          font-size: 1rem;
-          font-weight: 700;
-          margin-bottom: 6px;
-        }
-        .dish-desc {
-          font-size: 0.85rem;
-          color: #666;
-          margin-bottom: 8px;
+          padding: 15px;
         }
         .dish-price {
-          font-size: 0.95rem;
+          font-size: 1.1rem;
           font-weight: 600;
-          color: #ff5a1f;
+          color: #ff4c29;
+        }
+        .rating {
+          color: #000201ff;
+          font-weight: 500;
+        }
+        .delivery-time {
+          font-size: 0.8rem;
         }
       `}</style>
     </div>

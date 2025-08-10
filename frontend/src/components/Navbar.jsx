@@ -239,7 +239,7 @@ const Navbar = () => {
                 {/* Support Info */}
                 <div className="support-info text-end">
                   <div className="support-label fw-bold">Hotline</div>
-                  <div className="support-number">+6100 0029</div>
+                  <div className="support-number">+91 9754390326</div>
                 </div>
 
                

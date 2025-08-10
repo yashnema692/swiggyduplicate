@@ -91,13 +91,22 @@ function ManageCuisines() {
 
   return (
     <div className="container py-4">
-      <h2 className="mb-4 text-center text-primary fw-bold">
+      {/* Page Title */}
+      <h2
+        className="mb-4 text-center fw-bold"
+        style={{ color: "#1e3c72" }}
+      >
         🍴 Manage Cuisines & Dishes
       </h2>
 
       {/* Cuisine Form */}
-      <div className="card mb-4 shadow-sm border-0 rounded-3">
-        <div className="card-header bg-gradient text-white fw-semibold" style={{background:"linear-gradient(90deg,#6a11cb,#2575fc)"}}>
+      <div className="card mb-4 shadow-lg border-0 rounded-3">
+        <div
+          className="card-header text-white fw-semibold"
+          style={{
+            background: "linear-gradient(90deg,#1e3c72,#2a5298)",
+          }}
+        >
           {editingCuisine ? "✏ Edit Cuisine" : "➕ Add Cuisine"}
         </div>
         <div className="card-body bg-light">
@@ -130,7 +139,7 @@ function ManageCuisines() {
               />
             </div>
             <div className="col-12 text-end">
-              <button type="submit" className="btn btn-success px-4">
+              <button type="submit" className="btn btn-primary px-4 fw-bold">
                 {editingCuisine ? "Update" : "Add"} Cuisine
               </button>
             </div>
@@ -142,19 +151,28 @@ function ManageCuisines() {
       <div className="row">
         {cuisines.map((cuisine) => (
           <div className="col-md-6 mb-4" key={cuisine._id}>
-            <div className="card shadow-sm border-0 rounded-3 h-100">
+            <div className="card shadow-lg border-0 rounded-3 h-100">
               {cuisine.image && (
                 <img
                   src={cuisine.image}
                   alt={cuisine.name}
                   className="card-img-top"
-                  style={{ height: "180px", objectFit: "cover" }}
+                  style={{
+                    height: "200px",
+                    objectFit: "cover",
+                    borderRadius: "6px 6px 0 0",
+                  }}
                 />
               )}
               <div className="card-body d-flex flex-column bg-light">
-                <h5 className="card-title text-dark">{cuisine.name}</h5>
-                <p className="card-text text-muted small">{cuisine.description}</p>
+                <h5 className="card-title fw-bold text-dark">
+                  {cuisine.name}
+                </h5>
+                <p className="card-text text-muted small">
+                  {cuisine.description}
+                </p>
 
+                {/* Cuisine Actions */}
                 <div className="mb-2">
                   <button
                     className="btn btn-sm btn-outline-primary me-2"
@@ -170,12 +188,12 @@ function ManageCuisines() {
                   </button>
                 </div>
 
-                {/* Dishes with Scroll */}
-                <h6 className="mt-3 fw-semibold">Dishes</h6>
+                {/* Dishes */}
+                <h6 className="mt-3 fw-semibold text-primary">🍽 Dishes</h6>
                 <div
                   className="dish-list"
                   style={{
-                    maxHeight: "160px",
+                    maxHeight: "180px",
                     overflowY: "auto",
                     border: "1px solid #e0e0e0",
                     borderRadius: "6px",
@@ -189,8 +207,21 @@ function ManageCuisines() {
                         key={dish._id}
                         className="d-flex justify-content-between align-items-center border-bottom py-2"
                       >
-                        <div>
-                          🍽 <strong>{dish.name}</strong> – ₹{dish.price}
+                        <div className="d-flex align-items-center">
+                          {dish.image && (
+                            <img
+                              src={dish.image}
+                              alt={dish.name}
+                              style={{
+                                width: "35px",
+                                height: "35px",
+                                objectFit: "cover",
+                                borderRadius: "50%",
+                                marginRight: "8px",
+                              }}
+                            />
+                          )}
+                          <strong>{dish.name}</strong> – ₹{dish.price}
                         </div>
                         <div>
                           <button
@@ -201,7 +232,9 @@ function ManageCuisines() {
                           </button>
                           <button
                             className="btn btn-sm btn-outline-danger"
-                            onClick={() => handleDeleteDish(cuisine._id, dish._id)}
+                            onClick={() =>
+                              handleDeleteDish(cuisine._id, dish._id)
+                            }
                           >
                             🗑
                           </button>
@@ -209,7 +242,9 @@ function ManageCuisines() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-muted small">No dishes added yet.</p>
+                    <p className="text-muted small m-2">
+                      No dishes added yet.
+                    </p>
                   )}
                 </div>
 
@@ -227,8 +262,13 @@ function ManageCuisines() {
 
       {/* Dish Form */}
       {selectedCuisine && (
-        <div className="card mt-4 shadow-sm border-0 rounded-3">
-          <div className="card-header bg-success text-white fw-semibold">
+        <div className="card mt-4 shadow-lg border-0 rounded-3">
+          <div
+            className="card-header text-white fw-semibold"
+            style={{
+              background: "linear-gradient(90deg,#1e3c72,#2a5298)",
+            }}
+          >
             {editingDish ? "✏ Edit Dish" : "➕ Add Dish"}
           </div>
           <div className="card-body bg-light">
@@ -277,7 +317,7 @@ function ManageCuisines() {
                 />
               </div>
               <div className="col-12 text-end">
-                <button type="submit" className="btn btn-success px-4">
+                <button type="submit" className="btn btn-primary px-4 fw-bold">
                   {editingDish ? "Update Dish" : "Save Dish"}
                 </button>
               </div>

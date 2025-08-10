@@ -16,51 +16,87 @@ function CartPage() {
     fetchOrders();
   }, []);
 
+  // format date
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return date.toLocaleString("en-IN", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
   return (
     <div className="container py-4">
-      <h3 className="fw-bold mb-3">My Cart / Orders</h3>
-      <div className="card shadow-sm">
-        <div className="card-body">
-          {orders.length === 0 ? (
-            <p className="text-muted text-center">No orders yet</p>
-          ) : (
-            <table className="table table-hover">
-              <thead className="table-light">
-                <tr>
-                  <th>Dish</th>
-                  <th>Cuisine</th>
-                  <th>Qty</th>
-                  <th>Price</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => (
-                  <tr key={order._id}>
-                    <td>{order.dishName}</td>
-                    <td>{order.cuisine}</td>
-                    <td>{order.quantity}</td>
-                    <td>₹{order.price}</td>
-                    <td>
+      <h3 className="fw-bold mb-4">🛒 My Cart / Orders</h3>
+
+      {orders.length === 0 ? (
+        <p className="text-muted text-center">No orders yet</p>
+      ) : (
+        <div className="order-list">
+          {orders.map((order) => (
+            <div key={order._id} className="card mb-3 shadow-sm border-0 rounded-3 order-card">
+              <div className="row g-0">
+                
+
+                {/* ✅ Order Details */}
+                <div className="col-md-9">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <h5 className="card-title mb-0">{order.dishName}</h5>
                       <span
-                        className={
-                          order.status === "delivered"
-                            ? "text-success fw-bold"
-                            : order.status === "pending"
-                            ? "text-warning fw-bold"
-                            : "text-primary fw-bold"
-                        }
+                        className={`badge fs-6 px-3 py-2 ${
+                          order.status === "Delivered"
+                            ? "bg-success"
+                            : order.status === "Pending"
+                            ? "bg-warning text-dark"
+                            : order.status === "Cancelled"
+                            ? "bg-danger"
+                            : "bg-primary"
+                        }`}
                       >
                         {order.status}
                       </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                    </div>
+                    <p className="text-muted mb-1">Cuisine: {order.cuisine}</p>
+                    <p className="mb-1">
+                      Qty: <strong>{order.quantity}</strong> × ₹{order.price} ={" "}
+                      <strong>₹{order.price * order.quantity}</strong>
+                    </p>
+
+                    {/* ✅ Customer Info */}
+                    {order.customerName && (
+                      <p className="mb-1">
+                        👤 {order.customerName} | 📞 {order.mobile}
+                      </p>
+                    )}
+                    {order.address && (
+                      <p className="text-muted small mb-2">📍 {order.address}</p>
+                    )}
+
+                    {/* ✅ Order Dates */}
+                    <div className="d-flex justify-content-between text-muted small">
+                      <span>Ordered: {formatDate(order.createdAt)}</span>
+                      <span>Updated: {formatDate(order.updatedAt)}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
+
+      {/* ✅ CSS */}
+      <style jsx>{`
+        .order-card {
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .order-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+      `}</style>
     </div>
   );
 }
