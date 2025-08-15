@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-
 const TopStatsBar = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -72,75 +71,94 @@ const TopStatsBar = () => {
           </div>
 
           {/* ✅ Right (User Info + Cart) */}
-          <div className="col-md-3 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0 gap-2">
-            {user ? (
-              <div className="d-flex align-items-center gap-2">
-                {/* 👇 Cart Button */}
-                <Link
-                  to="/cart"
-                  className="btn btn-sm fw-bold"
-                  style={{
-                    background: "white",
-                    color: "#FF0100",
-                    borderRadius: "50px",
-                    padding: "3px 12px",
-                    fontSize: "12px",
-                    lineHeight: "1",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                  }}
-                >
-                  <i className="fas fa-shopping-cart"></i> Cart
-                </Link>
+          {/* ✅ Right (User Info + Admin Login + Cart) */}
+<div className="col-md-3 d-flex justify-content-center justify-content-md-end mt-2 mt-md-0 gap-2">
+  {user ? (
+    <div className="d-flex align-items-center gap-2">
+      {/* 👇 Admin Login Button */}
+      <Link
+        to="/admin/login"
+        className="btn btn-sm fw-bold"
+        style={{
+          background: "white",
+          color: "#FF0100",
+          borderRadius: "50px",
+          padding: "3px 12px",
+          fontSize: "12px",
+          lineHeight: "1",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+        }}
+      >
+        Admin Login
+      </Link>
 
-                {/* 👇 User Info */}
-                <span
-                  className="fw-semibold"
-                  style={{
-                    fontSize: "13px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                  }}
-                >
-                  <i className="fas fa-user-circle fs-5"></i>
-                  {user.name}
-                </span>
+      {/* 👇 Cart Button */}
+      <Link
+        to="/cart"
+        className="btn btn-sm fw-bold"
+        style={{
+          background: "white",
+          color: "#FF0100",
+          borderRadius: "50px",
+          padding: "3px 12px",
+          fontSize: "12px",
+          lineHeight: "1",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+        }}
+      >
+        <i className="fas fa-shopping-cart"></i> Cart
+      </Link>
 
-                {/* 👇 Logout Button */}
-                <button
-                  onClick={handleLogout}
-                  className="btn btn-sm fw-bold"
-                  style={{
-                    background: "white",
-                    color: "#FF0100",
-                    borderRadius: "50px",
-                    padding: "3px 12px",
-                    fontSize: "12px",
-                    lineHeight: "1",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                  }}
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/login"
-                className="btn btn-sm fw-bold"
-                style={{
-                  background: "white",
-                  color: "#FF0100",
-                  borderRadius: "50px",
-                  padding: "3px 12px",
-                  fontSize: "12px",
-                  lineHeight: "1",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
-                }}
-              >
-                Login
-              </Link>
-            )}
-          </div>
+      {/* 👇 User Info */}
+      <span
+        className="fw-semibold"
+        style={{
+          fontSize: "13px",
+          display: "flex",
+          alignItems: "center",
+          gap: "5px",
+        }}
+      >
+        <i className="fas fa-user-circle fs-5"></i>
+        {user.name}
+      </span>
+
+      {/* 👇 Logout Button */}
+      <button
+        onClick={handleLogout}
+        className="btn btn-sm fw-bold"
+        style={{
+          background: "white",
+          color: "#FF0100",
+          borderRadius: "50px",
+          padding: "3px 12px",
+          fontSize: "12px",
+          lineHeight: "1",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+        }}
+      >
+        Logout
+      </button>
+    </div>
+  ) : (
+    <Link
+      to="/login"
+      className="btn btn-sm fw-bold"
+      style={{
+        background: "white",
+        color: "#FF0100",
+        borderRadius: "50px",
+        padding: "3px 12px",
+        fontSize: "12px",
+        lineHeight: "1",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+      }}
+    >
+      Login
+    </Link>
+  )}
+</div>
+
         </div>
       </div>
 
@@ -241,8 +259,6 @@ const Navbar = () => {
                   <div className="support-label fw-bold">Hotline</div>
                   <div className="support-number">+91 9754390326</div>
                 </div>
-
-               
               </div>
             </div>
 
@@ -827,4 +843,3 @@ const Navbar = () => {
 };
 
 export { TopStatsBar, Navbar };
-
